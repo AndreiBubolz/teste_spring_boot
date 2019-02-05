@@ -6,6 +6,7 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.User;
+import com.example.demo.dto.UserDTO;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.exception.ObjectNotFoundException;
 import java.util.List;
@@ -33,5 +34,21 @@ public class UserService {
         Optional<User> obj = repo.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
     
+    }
+    
+    public User insert(User user) {
+        return repo.insert(user);
+    
+    }
+    
+    public void delete(String id) {
+ 
+        findById(id);
+        repo.deleteById(id);
+    
+    }
+    
+    public User fromDTO(UserDTO obj){     
+        return new User(obj.getId(), obj.getName(), obj.getEmail());   
     }
 }

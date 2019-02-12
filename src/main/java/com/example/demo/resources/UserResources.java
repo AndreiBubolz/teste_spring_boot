@@ -5,6 +5,7 @@
  */
 package com.example.demo.resources;
 
+import com.example.demo.domain.Post;
 import com.example.demo.domain.User;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.service.UserService;
@@ -52,6 +53,14 @@ public class UserResources {
         return ResponseEntity.ok().body(new UserDTO(user));
     }
     
+    @RequestMapping(value="/{id}/posts", method = RequestMethod.GET)
+    public ResponseEntity<List<Post>> findPosts(@PathVariable String id){
+        
+        User user = service.findById(id);
+       
+        return ResponseEntity.ok().body(user.getPosts());
+    }
+    
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> findById(@RequestBody UserDTO userdto){
         
@@ -67,6 +76,16 @@ public class UserResources {
     public ResponseEntity<Void> deleteById(@PathVariable String id){
         
         service.delete(id);
+        
+        return ResponseEntity.noContent().build();
+    }
+    
+    @RequestMapping(value="/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Void> deleteById(@RequestBody UserDTO userDto, @PathVariable String id){
+        
+        User user = service.fromDTO(userDto);
+        user.setId(id);
+        service.update(user);
         
         return ResponseEntity.noContent().build();
     }
